@@ -1,22 +1,16 @@
 package com.project.mod.model;
 
+import lombok.Data;
+
+import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="skill")
-public class Skill extends AuditModel {
-	
-	private static final long serialVersionUID = 1L;
+@Data
+public class Skill{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,56 +25,19 @@ public class Skill extends AuditModel {
 	@Column(name = "prerequisites", nullable = false)
 	private String prerequisites;
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy="skill")
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy="skill")
 	private List<Training> trainings;
+	@Column
+	private Date createdAt;
 
-	public Skill() {
-		super();
-	}
+	@Column
+	private Date updatedAt;
 
-	public Skill(Integer id, String name, String toc, String prerequisites) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.toc = toc;
-		this.prerequisites = prerequisites;
+	@PrePersist
+	protected void prePersist(){
+		if(this.createdAt  ==null){
+			this.createdAt=new Date();
+		}
+		this.updatedAt=new Date();
 	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getToc() {
-		return toc;
-	}
-
-	public void setToc(String toc) {
-		this.toc = toc;
-	}
-
-	public String getPrerequisites() {
-		return prerequisites;
-	}
-
-	public void setPrerequisites(String prerequisites) {
-		this.prerequisites = prerequisites;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-	
-	
 }

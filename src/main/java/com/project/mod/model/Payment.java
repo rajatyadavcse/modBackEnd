@@ -1,24 +1,17 @@
 package com.project.mod.model;
 
+import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Table(name = "payment")
-@DynamicUpdate
-public class Payment extends AuditModel {
-	
-	private static final long serialVersionUID = 1L;
+@Data
+public class Payment{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,99 +43,17 @@ public class Payment extends AuditModel {
 
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy="payment")
 	private List<Training> training;
-	
-	public Payment() {
-		super();
-	}
+	@Column
+	private Date createdAt;
 
-	public Payment(Integer id, String txnType, Float amount, String remarks, String mentorName, String skillName, Float totalAmountToMentor, Integer trainingId) {
-		super();
-		this.id = id;
-		this.txnType = txnType;
-		this.amount = amount;
-		this.remarks = remarks;
-//		this.mentorId = mentorId;
-		this.mentorName = mentorName;
-		this.trainingId = trainingId;
-		this.skillName = skillName;
-		this.totalAmountToMentor = totalAmountToMentor;
-	}
+	@Column
+	private Date updatedAt;
 
-	public Integer getId() {
-		return id;
+	@PrePersist
+	protected void prePersist(){
+		if(this.createdAt  ==null){
+			this.createdAt=new Date();
+		}
+		this.updatedAt=new Date();
 	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
-
-	public String getTxnType() {
-		return txnType;
-	}
-
-	public void setTxnType(String txnType) {
-		this.txnType = txnType;
-	}
-
-	public Float getAmount() {
-		return amount;
-	}
-
-	public void setAmount(Float amount) {
-		this.amount = amount;
-	}
-
-	public String getRemarks() {
-		return remarks;
-	}
-
-	public void setRemarks(String remarks) {
-		this.remarks = remarks;
-	}
-
-//	public Integer getMentorId() {
-//		return mentorId;
-//	}
-//
-//	public void setMentorId(Integer mentorId) {
-//		this.mentorId = mentorId;
-//	}
-
-	public String getMentorName() {
-		return mentorName;
-	}
-
-	public void setMentorName(String mentorName) {
-		this.mentorName = mentorName;
-	}
-
-	public Integer getTrainingId() {
-		return trainingId;
-	}
-
-	public void setTrainingId(Integer trainingId) {
-		this.trainingId = trainingId;
-	}
-
-	public String getSkillName() {
-		return skillName;
-	}
-
-	public void setSkillName(String skillName) {
-		this.skillName = skillName;
-	}
-
-	public Float getTotalAmountToMentor() {
-		return totalAmountToMentor;
-	}
-
-	public void setTotalAmountToMentor(Float totalAmountToMentor) {
-		this.totalAmountToMentor = totalAmountToMentor;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-	
-	
-}

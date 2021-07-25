@@ -1,23 +1,16 @@
 package com.project.mod.model;
+import lombok.Data;
+
+import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
+import javax.persistence.*;
 
 
 @Entity
 @Table(name="technology")
-
-public class Technology extends AuditModel {
-
-	private static final long serialVersionUID = 1L;
+@Data
+public class Technology{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -38,48 +31,17 @@ public class Technology extends AuditModel {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy="technology")
 	private List<Training> trainings;
+	@Column
+	private Date createdAt;
 
-	public Integer getId() {
-		return id;
-	}
+	@Column
+	private Date updatedAt;
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getTechName() {
-		return techName;
-	}
-
-	public void setTechName(String techName) {
-		this.techName = techName;
-	}
-
-	public Float getPrice() {
-		return price;
-	}
-
-	public void setPrice(Float price) {
-		this.price = price;
-	}
-
-	public String getDuration() {
-		return duration;
-	}
-
-	public void setDuration(String duration) {
-		this.duration = duration;
-	}
-
-	public String getRemarks() {
-		return remarks;
-	}
-
-	public void setRemarks(String remarks) {
-		this.remarks = remarks;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	@PrePersist
+	protected void prePersist(){
+		if(this.createdAt  ==null){
+			this.createdAt=new Date();
+		}
+		this.updatedAt=new Date();
 	}
 }

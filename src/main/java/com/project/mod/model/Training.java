@@ -3,27 +3,18 @@ package com.project.mod.model;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
+import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@DynamicUpdate
-public class Training extends AuditModel {
-	private static final long serialVersionUID = 1L;
+@Table(name="training")
+@Data
+public class Training{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -110,178 +101,19 @@ public class Training extends AuditModel {
 			inverseJoinColumns = { @JoinColumn(name = "payment_id", 
 					nullable = false, updatable = false) })
 	private List<Payment> payment;
-	
-	public Training() {
-		super();
-	}
 
-	public Training(Integer id, String status, Integer progress, Float fees, Float commisionAmount, Integer rating,
-			Date startDate, Date endDate, String startTime, String endTime, Float amountRecieved,
-			String razorPaymentId, Mentor mentor, List<User> user, List<Skill> skill, Technology technology,
-			List<Payment> payment) {
-		super();
-		this.id = id;
-		this.status = status;
-		this.progress = progress;
-		this.fees = fees;
-		this.commisionAmount = commisionAmount;
-		this.rating = rating;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.amountRecieved = amountRecieved;
-		this.razorPaymentId = razorPaymentId;
-		this.mentor = mentor;
-		this.user = user;
-		this.skill = skill;
-		this.technology = technology;
-		this.payment = payment;
-	}
+	@Column
+	private Date createdAt;
 
-	public Integer getId() {
-		return id;
-	}
+	@Column
+	private Date updatedAt;
 
-	public void setId(Integer id) {
-		this.id = id;
+	@PrePersist
+	protected void prePersist(){
+		if(this.createdAt  ==null){
+			this.createdAt=new Date();
+		}
+		this.updatedAt=new Date();
 	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public Integer getProgress() {
-		return progress;
-	}
-
-	public void setProgress(Integer progress) {
-		this.progress = progress;
-	}
-
-	public Float getFees() {
-		return fees;
-	}
-
-	public void setFees(Float fees) {
-		this.fees = fees;
-	}
-
-	public Float getCommisionAmount() {
-		return commisionAmount;
-	}
-
-	public void setCommisionAmount(Float commisionAmount) {
-		this.commisionAmount = commisionAmount;
-	}
-
-	public Integer getRating() {
-		return rating;
-	}
-
-	public void setRating(Integer rating) {
-		this.rating = rating;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
-	public String getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(String startTime) {
-		this.startTime = startTime;
-	}
-
-	public String getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(String endTime) {
-		this.endTime = endTime;
-	}
-
-	public Float getAmountRecieved() {
-		return amountRecieved;
-	}
-
-	public void setAmountRecieved(Float amountRecieved) {
-		this.amountRecieved = amountRecieved;
-	}
-
-	public String getRazorPaymentId() {
-		return razorPaymentId;
-	}
-
-	public void setRazorPaymentId(String razorPaymentId) {
-		this.razorPaymentId = razorPaymentId;
-	}
-
-	public Mentor getMentor() {
-		return mentor;
-	}
-
-	public void setMentor(Mentor mentor) {
-		this.mentor = mentor;
-	}
-
-	public List<User> getUser() {
-		return user;
-	}
-
-	public void setUser(List<User> user) {
-		this.user = user;
-	}
-
-	public List<Skill> getSkill() {
-		return skill;
-	}
-
-	public void setSkill(List<Skill> skill) {
-		this.skill = skill;
-	}
-
-	public Technology getTechnology() {
-		return technology;
-	}
-
-	public void setTechnology(Technology technology) {
-		this.technology = technology;
-	}
-
-	public List<Payment> getPayment() {
-		return payment;
-	}
-
-	public void setPayment(List<Payment> payment) {
-		this.payment = payment;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
-	public static String getAlphaNumericString() {
-		return ALPHA_NUMERIC_STRING;
-	}
-
 			
 }
